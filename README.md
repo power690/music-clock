@@ -5,11 +5,11 @@
 ## 📸 应用截图
 
 <div align="center">
-  <img src="screenshots/clock_ui.jpg" width="45%" alt="时钟界面">
   <img src="screenshots/music_ui.jpg" width="45%" alt="音乐界面">
+  <img src="screenshots/clock_ui.jpg" width="45%" alt="时钟界面">
 </div>
 
-**左：时钟主界面** | **右：音乐播放界面**
+**左：音乐播放界面** | **右：时钟主界面**
 
 ---
 
