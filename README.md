@@ -58,44 +58,6 @@
 
 ---
 
-## 🏗️ 项目结构
-
-```
-app/src/main/java/com/xiaowei/music/
-├── MainActivity.java              # 时钟主界面
-├── MusicPlayerActivity.java       # 音乐播放界面
-├── AboutActivity.java             # 关于页面
-├── InstructionActivity.java       # 操作说明页面
-├── OperationGuideActivity.java    # 首次启动引导页
-├── LocationSettingActivity.java   # 地区设置页面
-├── LocalMusicHelper.java          # 本地音乐播放管理器
-├── MusicDetectorService.java      # 音乐状态检测服务
-├── MusicNotificationService.java  # 音乐通知与媒体控制服务
-├── KeepAliveService.java          # 一像素保活服务
-├── AdvancedBlurUtils.java         # 高斯模糊工具类
-└── LunarUtil.java                 # 农历工具类
-```
-
-## 🛠️ 技术栈
-
-- **开发语言**：Java
-- **最低SDK**：Android 5.0 (API 21)
-- **构建工具**：Gradle 8.11.1
-- **媒体框架**：MediaPlayer + MediaSession
-- **网络请求**：HttpURLConnection
-- **数据存储**：SharedPreferences
-
-## 📋 构建与运行
-
-1. 克隆本仓库
-```bash
-git clone https://github.com/xiaoweimusic/music-clock.git
-```
-
-2. 使用 Android Studio 打开项目
-
-3. 同步 Gradle 并编译运行
-
 ## 📜 开源协议
 
 本项目基于 [GNU General Public License v3.0](LICENSE) 开源协议发布。

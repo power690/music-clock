@@ -10,11 +10,20 @@ android {
         applicationId "com.xiaowei.music"
         minSdk 21 
         targetSdk 36
-        versionCode 3
-        versionName "3.0"
+        versionCode 1
+        versionName "1.0.0"
         
         vectorDrawables { 
             useSupportLibrary true
+        }
+    }
+
+    signingConfigs {
+        release {
+            storeFile file('../keystore/release.jks')
+            storePassword 'music123'
+            keyAlias 'release'
+            keyPassword 'music123'
         }
     }
 
@@ -22,6 +31,7 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 
