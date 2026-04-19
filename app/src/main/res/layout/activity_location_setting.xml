@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_height="match_parent"
+     android:layout_width="match_parent"
+     android:background="#FF333333"
+     android:gravity="center"
+     android:padding="24dp"
+     android:orientation="vertical">
+
+    <LinearLayout
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:layout_marginBottom="40dp"
+         android:gravity="center"
+         android:background="#FF333333"
+         android:padding="16dp"
+         android:orientation="horizontal">
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:gravity="center"
+             android:textSize="22sp"
+             android:textColor="#FFFFFFFF"
+             android:id="@+id/titleText"
+             android:text="设置天气位置"
+             android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:layout_marginBottom="30dp"
+         android:gravity="center_vertical"
+         android:orientation="horizontal">
+
+        <LinearLayout
+             android:layout_height="wrap_content"
+             android:layout_width="0dp"
+             android:paddingEnd="8dp"
+             android:orientation="vertical"
+             android:layout_weight="1">
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:layout_marginBottom="8dp"
+                 android:gravity="center"
+                 android:textSize="14sp"
+                 android:textColor="#FFFFFFFF"
+                 android:text="选择省份"
+                 android:textStyle="bold" />
+
+            <RelativeLayout
+                 android:layout_height="45dp"
+                 android:layout_width="match_parent">
+
+                <TextView
+                     android:layout_height="45dp"
+                     android:layout_width="match_parent"
+                     android:paddingEnd="8dp"
+                     android:background="@drawable/spinner_background_no_arrow"
+                     android:gravity="center"
+                     android:ellipsize="end"
+                     android:textColor="#FFFFFFFF"
+                     android:singleLine="true"
+                     android:paddingStart="8dp"
+                     android:id="@+id/provinceTextView"
+                     android:text="北京市" />
+
+                <ImageView
+                     android:layout_height="24dp"
+                     android:layout_width="24dp"
+                     android:layout_marginEnd="8dp"
+                     android:src="@drawable/ic_arrow_drop_down_gray"
+                     android:contentDescription="下拉箭头"
+                     android:layout_centerVertical="true"
+                     android:layout_alignParentEnd="true"
+                     android:id="@+id/provinceArrow" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+             android:layout_height="wrap_content"
+             android:layout_width="0dp"
+             android:paddingEnd="4dp"
+             android:orientation="vertical"
+             android:paddingStart="4dp"
+             android:layout_weight="1">
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:layout_marginBottom="8dp"
+                 android:gravity="center"
+                 android:textSize="14sp"
+                 android:textColor="#FFFFFFFF"
+                 android:text="选择城市"
+                 android:textStyle="bold" />
+
+            <RelativeLayout
+                 android:layout_height="45dp"
+                 android:layout_width="match_parent">
+
+                <TextView
+                     android:layout_height="45dp"
+                     android:layout_width="match_parent"
+                     android:paddingEnd="8dp"
+                     android:background="@drawable/spinner_background_no_arrow"
+                     android:gravity="center"
+                     android:ellipsize="end"
+                     android:textColor="#FFFFFFFF"
+                     android:singleLine="true"
+                     android:paddingStart="8dp"
+                     android:id="@+id/cityTextView"
+                     android:text="北京市" />
+
+                <ImageView
+                     android:layout_height="24dp"
+                     android:layout_width="24dp"
+                     android:layout_marginEnd="8dp"
+                     android:src="@drawable/ic_arrow_drop_down_gray"
+                     android:contentDescription="下拉箭头"
+                     android:layout_centerVertical="true"
+                     android:layout_alignParentEnd="true"
+                     android:id="@+id/cityArrow" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+             android:layout_height="wrap_content"
+             android:layout_width="0dp"
+             android:orientation="vertical"
+             android:paddingStart="8dp"
+             android:layout_weight="1">
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:layout_marginBottom="8dp"
+                 android:gravity="center"
+                 android:textSize="14sp"
+                 android:textColor="#FFFFFFFF"
+                 android:text="选择县区 (可选)"
+                 android:textStyle="bold" />
+
+            <RelativeLayout
+                 android:layout_height="45dp"
+                 android:layout_width="match_parent">
+
+                <TextView
+                     android:layout_height="45dp"
+                     android:layout_width="match_parent"
+                     android:paddingEnd="8dp"
+                     android:background="@drawable/spinner_background_no_arrow"
+                     android:gravity="center"
+                     android:ellipsize="end"
+                     android:textColor="#FFFFFFFF"
+                     android:singleLine="true"
+                     android:paddingStart="8dp"
+                     android:id="@+id/districtTextView"
+                     android:text="" />
+
+                <ImageView
+                     android:layout_height="24dp"
+                     android:layout_width="24dp"
+                     android:layout_marginEnd="8dp"
+                     android:src="@drawable/ic_arrow_drop_down_gray"
+                     android:contentDescription="下拉箭头"
+                     android:layout_centerVertical="true"
+                     android:layout_alignParentEnd="true"
+                     android:id="@+id/districtArrow" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:gravity="center"
+         android:orientation="horizontal"
+         android:layout_marginTop="20dp"
+         android:id="@+id/buttonContainer">
+
+        <Button
+             android:layout_height="36dp"
+             android:layout_width="140dp"
+             android:background="@color/light_gray"
+             android:focusableInTouchMode="true"
+             android:textSize="13sp"
+             android:textColor="#FF000000"
+             android:focusable="true"
+             android:id="@+id/confirmButton"
+             android:text="确认设置" />
+
+    </LinearLayout>
+
+</LinearLayout>

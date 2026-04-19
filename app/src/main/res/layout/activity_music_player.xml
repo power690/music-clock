@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:layout_height="match_parent"
+     android:layout_width="match_parent"
+     android:background="#FF222222"
+     android:id="@+id/containerLayout">
+
+    <ImageView
+         android:id="@+id/backgroundImage"
+         android:layout_width="0dp"
+         android:layout_height="0dp"
+         android:scaleType="centerCrop"
+         android:alpha="1.0"
+         app:layout_constraintTop_toTopOf="parent"
+         app:layout_constraintBottom_toBottomOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintVertical_bias="0.2" />
+
+    <View
+         android:layout_height="0dp"
+         android:layout_width="68dp"
+         android:visibility="gone"
+         android:background="@drawable/ambient_light_gradient"
+         app:layout_constraintTop_toTopOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintBottom_toBottomOf="parent"
+         android:id="@+id/leftAmbientLight" />
+
+    <View
+         android:layout_height="0dp"
+         android:layout_width="68dp"
+         android:visibility="gone"
+         android:background="@drawable/ambient_light_gradient"
+         app:layout_constraintTop_toTopOf="parent"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintBottom_toBottomOf="parent"
+         android:id="@+id/rightAmbientLight" />
+
+    <android.support.constraint.ConstraintLayout
+         android:layout_height="wrap_content"
+         android:layout_width="0dp"
+         android:layout_marginEnd="18dp"
+         app:layout_constraintHorizontal_bias="0.5"
+         app:layout_constraintBottom_toBottomOf="parent"
+         android:layout_marginStart="18dp"
+         android:scaleX="0.90"
+         app:layout_constraintTop_toTopOf="parent"
+         android:scaleY="0.90"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintWidth_percent="0.88"
+         app:layout_constraintEnd_toEndOf="parent"
+         android:id="@+id/mainContent">
+
+        
+        <android.support.constraint.ConstraintLayout
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:layout_marginEnd="22dp"
+             app:layout_constraintTop_toTopOf="parent"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintEnd_toStartOf="@id/rightContainer"
+             app:layout_constraintBottom_toBottomOf="parent"
+             android:layout_marginStart="12dp"
+             android:id="@+id/leftContainer">
+
+            <android.support.v7.widget.CardView
+                 android:layout_height="215dp"
+                 android:layout_width="215dp"
+                 app:layout_constraintTop_toTopOf="parent"
+                 app:layout_constraintStart_toStartOf="parent"
+                 app:cardElevation="7dp"
+                 app:cardBackgroundColor="@android:color/transparent"
+                 app:cardCornerRadius="11dp"
+                 android:id="@+id/albumCard">
+
+                <ImageView
+                     android:layout_height="match_parent"
+                     android:layout_width="match_parent"
+                     android:scaleType="centerCrop"
+                     android:adjustViewBounds="false"
+                     android:src="@drawable/ic_music_note"
+                     android:background="#FF444444"
+                     android:padding="0dp"
+                     android:id="@+id/albumCover" />
+
+            </android.support.v7.widget.CardView>
+
+            <LinearLayout
+                 android:layout_height="wrap_content"
+                 android:layout_width="310dp"
+                 android:paddingEnd="3dp"
+                 android:gravity="center_vertical"
+                 app:layout_constraintHorizontal_bias="0.1"
+                 android:orientation="horizontal"
+                 app:layout_constraintStart_toStartOf="@id/albumCard"
+                 app:layout_constraintEnd_toEndOf="@id/albumCard"
+                 android:paddingStart="0dp"
+                 android:layout_marginTop="9dp"
+                 app:layout_constraintTop_toBottomOf="@id/albumCard"
+                 android:id="@+id/progressContainer">
+
+                <SeekBar
+                     android:layout_height="wrap_content"
+                     android:layout_width="0dp"
+                     android:max="1000"
+                     android:progressBackgroundTint="#88FFFFFF"
+                     android:paddingBottom="11dp"
+                     android:thumbTint="#FFFFFF"
+                     android:progressTint="#FFFFFF"
+                     android:progress="0"
+                     android:layout_weight="1"
+                     android:id="@+id/progressBar"
+                     android:paddingTop="11dp" />
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="wrap_content"
+                     android:textSize="11.5sp"
+                     android:textColor="#BBFFFFFF"
+                     android:layout_marginStart="7dp"
+                     android:id="@+id/timeDisplay"
+                     android:text="00:00 / 00:00" />
+
+            </LinearLayout>
+
+        </android.support.constraint.ConstraintLayout>
+
+        
+        <android.support.constraint.ConstraintLayout
+             android:layout_height="0dp"
+             android:layout_width="0dp"
+             app:layout_constraintTop_toTopOf="parent"
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintStart_toEndOf="@id/leftContainer"
+             app:layout_constraintBottom_toBottomOf="parent"
+             android:id="@+id/rightContainer">
+
+            <android.support.constraint.Guideline
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:orientation="horizontal"
+                 app:layout_constraintGuide_percent="0.69"
+                 android:id="@+id/guideline" />
+
+            <LinearLayout
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 app:layout_constraintHorizontal_bias="0.35"
+                 android:orientation="vertical"
+                 app:layout_constraintBottom_toTopOf="@id/guideline"
+                 app:layout_constraintVertical_bias="0.2"
+                 android:layout_marginStart="33dp"
+                 app:layout_constraintVertical_chainStyle="packed"
+                 android:gravity="start"
+                 app:layout_constraintTop_toTopOf="parent"
+                 app:layout_constraintStart_toStartOf="parent"
+                 app:layout_constraintEnd_toEndOf="parent"
+                 android:id="@+id/songInfoContainer">
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="wrap_content"
+                     android:layout_marginBottom="7dp"
+                     android:ellipsize="marquee"
+                     android:textSize="21sp"
+                     android:singleLine="true"
+                     android:paddingEnd="18dp"
+                     android:textColor="@android:color/white"
+                     android:id="@+id/songTitle"
+                     android:text="等待播放..."
+                     android:textStyle="bold" />
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="wrap_content"
+                     android:textSize="15sp"
+                     android:textColor="#BBFFFFFF"
+                     android:paddingEnd="18dp"
+                     android:id="@+id/artistName"
+                     android:text="请打开音乐APP" />
+
+            </LinearLayout>
+
+            
+            <LinearLayout
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:gravity="center"
+                 app:layout_constraintHorizontal_bias="0.35"
+                 android:orientation="horizontal"
+                 app:layout_constraintStart_toStartOf="parent"
+                 app:layout_constraintEnd_toEndOf="parent"
+                 app:layout_constraintBottom_toBottomOf="parent"
+                 app:layout_constraintTop_toBottomOf="@id/guideline"
+                 android:layout_marginTop="20dp"
+                 app:layout_constraintVertical_bias="0.6"
+                 android:id="@+id/controlsContainer">
+
+                <ImageView
+                     android:layout_height="58dp"
+                     android:layout_width="58dp"
+                     android:src="@drawable/ic_skip_previous"
+                     android:background="?attr/selectableItemBackgroundBorderless"
+                     android:clickable="true"
+                     android:padding="10.5dp"
+                     android:tint="#FFFFFFFF"
+                     android:id="@+id/btnPrev" />
+
+                <ImageView
+                     android:layout_height="58dp"
+                     android:layout_width="58dp"
+                     android:layout_marginEnd="18dp"
+                     android:src="@drawable/ic_play"
+                     android:background="?attr/selectableItemBackgroundBorderless"
+                     android:clickable="true"
+                     android:padding="10.5dp"
+                     android:tint="#FFFFFFFF"
+                     android:layout_marginStart="18dp"
+                     android:id="@+id/btnPlayPause" />
+
+                <ImageView
+                     android:layout_height="58dp"
+                     android:layout_width="58dp"
+                     android:src="@drawable/ic_skip_next"
+                     android:background="?attr/selectableItemBackgroundBorderless"
+                     android:clickable="true"
+                     android:padding="10.5dp"
+                     android:tint="#FFFFFFFF"
+                     android:id="@+id/btnNext" />
+
+                <ImageView
+                     android:layout_height="42dp"
+                     android:layout_width="42dp"
+                     android:src="@drawable/ic_screen_rotate"
+                     android:background="?attr/selectableItemBackgroundBorderless"
+                     android:clickable="true"
+                     android:padding="8.5dp"
+                     android:tint="#FFFFFFFF"
+                     android:layout_marginStart="7dp"
+                     android:id="@+id/btnRotate" />
+
+                <ImageView
+                    android:id="@+id/btnMenu"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:src="@drawable/ic_more_vert"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:padding="8.5dp"
+                    android:tint="#FFFFFFFF"
+                    android:layout_marginStart="7dp" />
+
+            </LinearLayout>
+
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_height="match_parent"
+     android:layout_width="match_parent"
+     android:background="@android:color/black"
+     android:id="@+id/containerLayout">
+
+    
+    <ImageView
+        android:id="@+id/wallpaperImageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="false"
+        android:cropToPadding="false"
+        android:contentDescription="壁纸" />
+
+    
+    <View
+        android:id="@+id/leftAmbientLight"
+        android:layout_width="80dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="left"
+        android:background="@drawable/ambient_light_gradient"
+        android:visibility="gone" />
+
+    
+    <View
+        android:id="@+id/rightAmbientLight"
+        android:layout_width="80dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="right"
+        android:background="@drawable/ambient_light_gradient"
+        android:visibility="gone" />
+
+    <RelativeLayout
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:background="@android:color/transparent"
+         android:id="@+id/clockContainer">
+
+        <LinearLayout
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:gravity="center"
+             android:orientation="vertical"
+             android:id="@+id/clockLayout">
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:textSize="80sp"
+                 android:textColor="@android:color/white"
+                 android:id="@+id/timeTextView"
+                 android:textStyle="bold" />
+
+            <LinearLayout
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:gravity="center_vertical"
+                 android:orientation="horizontal"
+                 android:layout_marginTop="5dp">
+
+                <LinearLayout
+                     android:layout_height="wrap_content"
+                     android:layout_width="wrap_content"
+                     android:layout_marginEnd="6dp"
+                     android:gravity="center_vertical"
+                     android:orientation="horizontal"
+                     android:id="@+id/batteryContainer">
+
+                </LinearLayout>
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="wrap_content"
+                     android:textSize="30sp"
+                     android:textColor="@android:color/white"
+                     android:id="@+id/dateTextView" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:gravity="center"
+                 android:orientation="horizontal"
+                 android:layout_marginTop="3dp"
+                 android:id="@+id/weatherContainer">
+
+                <ImageView
+                     android:layout_height="24dp"
+                     android:layout_width="24dp"
+                     android:visibility="gone"
+                     android:layout_marginEnd="4dp"
+                     android:id="@+id/weatherIconImageView" />
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="wrap_content"
+                     android:textSize="24sp"
+                     android:textColor="@android:color/white"
+                     android:id="@+id/weatherTextView" />
+
+            </LinearLayout>
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:visibility="gone"
+                 android:textSize="24sp"
+                 android:textColor="@android:color/white"
+                 android:layout_marginTop="3dp"
+                 android:id="@+id/festivalTextView" />
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:textSize="24sp"
+                 android:textColor="@android:color/white"
+                 android:layout_marginTop="3dp"
+                 android:id="@+id/lunarTextView" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</FrameLayout>

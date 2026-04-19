@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_height="match_parent"
+     android:layout_width="match_parent"
+     android:background="#FF222222"
+     android:gravity="center"
+     android:padding="16dp"
+     android:orientation="vertical">
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:layout_marginBottom="30dp"
+         android:gravity="center"
+         android:textSize="22sp"
+         android:textColor="#FFFFFFFF"
+         android:id="@+id/titleText"
+         android:text="关于软件"
+         android:textStyle="bold" />
+
+    <LinearLayout
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:layout_marginBottom="30dp"
+         android:gravity="center"
+         android:orientation="vertical">
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:layout_marginBottom="15dp"
+             android:gravity="center"
+             android:textSize="18sp"
+             android:textColor="#FFFFFFFF"
+             android:text="开发者"
+             android:textStyle="bold" />
+
+        <ImageView
+             android:layout_height="80dp"
+             android:layout_width="80dp"
+             android:layout_marginBottom="15dp"
+             android:src="@drawable/developer_avatar"
+             android:scaleType="centerCrop"
+             android:background="@drawable/spinner_background_white_border"
+             android:id="@+id/avatarImageView" />
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:layout_marginBottom="10dp"
+             android:gravity="center"
+             android:textSize="20sp"
+             android:textColor="#FFFFFFFF"
+             android:id="@+id/nameTextView"
+             android:text="小威"
+             android:textStyle="bold" />
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:gravity="center"
+             android:textSize="16sp"
+             android:textColor="#FFCCCCCC"
+             android:id="@+id/versionTextView"
+             android:text="版本 2.0" />
+
+    </LinearLayout>
+
+    <LinearLayout
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:gravity="center"
+         android:orientation="horizontal"
+         android:layout_marginTop="10dp">
+
+        <Button
+             android:layout_height="36dp"
+             android:layout_width="140dp"
+             android:background="@color/light_gray"
+             android:focusableInTouchMode="true"
+             android:textSize="13sp"
+             android:textColor="#FF000000"
+             android:focusable="true"
+             android:id="@+id/confirmButton"
+             android:text="下一步" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialogRootLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/dialog_bottom_bg"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginBottom="12dp"
+    android:padding="0dp">
+
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@android:color/transparent">
+
+        <TextView
+            android:id="@+id/tvListTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="列表"
+            android:textColor="#FFFFFF"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:gravity="center"/>
+
+        
+        <View
+            android:layout_width="40dp"
+            android:layout_height="4dp"
+            android:background="#33FFFFFF"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="#55FFFFFF"
+            android:backgroundTintMode="src_in"/>
+    </RelativeLayout>
+
+    
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#11FFFFFF"/>
+
+    
+    <ListView
+        android:id="@+id/lvMusicList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:divider="#11FFFFFF"
+        android:dividerHeight="1dp"
+        android:paddingBottom="10dp"
+        android:clipToPadding="false"
+        android:scrollbarThumbVertical="@android:color/darker_gray"
+        android:overScrollMode="never"/>
+
+    
+    <TextView
+        android:id="@+id/tvEmptyHint"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="列表为空"
+        android:textColor="#88FFFFFF"
+        android:visibility="gone"/>
+
+</LinearLayout>

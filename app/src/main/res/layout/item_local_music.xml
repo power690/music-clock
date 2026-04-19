@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_height="wrap_content"
+     android:layout_width="match_parent"
+     android:gravity="center_vertical"
+     android:padding="12dp"
+     android:orientation="horizontal">
+
+    <ImageView
+         android:layout_height="32dp"
+         android:layout_width="32dp"
+         android:layout_marginEnd="16dp"
+         android:src="@drawable/ic_music_note"
+         android:scaleType="centerInside"
+         android:contentDescription="图标"
+         android:id="@+id/ivItemIcon" />
+
+    <LinearLayout
+         android:layout_height="wrap_content"
+         android:layout_width="0dp"
+         android:orientation="vertical"
+         android:layout_weight="1">
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:ellipsize="end"
+             android:textSize="16sp"
+             android:textColor="#FFFFFF"
+             android:singleLine="true"
+             android:id="@+id/tvItemTitle"
+             android:text="歌曲标题" />
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:ellipsize="end"
+             android:textSize="12sp"
+             android:textColor="#AAAAAA"
+             android:singleLine="true"
+             android:layout_marginTop="2dp"
+             android:id="@+id/tvItemArtist"
+             android:text="艺术家" />
+
+    </LinearLayout>
+
+</LinearLayout>

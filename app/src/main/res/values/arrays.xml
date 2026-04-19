@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="text_colors">
+        <item>@color/white</item>
+        <item>@color/red</item>
+        <item>@color/blue</item>
+        <item>@color/green</item>
+        <item>@color/yellow</item>
+        <item>@color/purple</item>
+        <item>@color/orange</item>
+        <item>@color/cyan</item>
+        <item>@color/pink</item>
+    </array>
+    
+    <array name="background_colors">
+        <item>@color/black</item>
+        <item>@color/dark_gray</item>
+        <item>@color/dark_blue</item>
+        <item>@color/dark_purple</item>
+        <item>@color/dark_brown</item>
+        <item>@color/dark_teal</item>
+        <item>@color/dark_indigo</item>
+    </array>
+    
+    <array name="color_names">
+        <item>白色</item>
+        <item>红色</item>
+        <item>蓝色</item>
+        <item>绿色</item>
+        <item>黄色</item>
+        <item>紫色</item>
+        <item>橙色</item>
+        <item>青色</item>
+        <item>粉色</item>
+    </array>
+    
+    <array name="background_names">
+        <item>黑色</item>
+        <item>深灰</item>
+        <item>深蓝</item>
+        <item>深紫</item>
+        <item>深棕</item>
+        <item>深青</item>
+        <item>深靛</item>
+    </array>
+</resources>

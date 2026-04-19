@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    
+    
+    <color name="red">#FFFF5252</color>
+    <color name="blue">#FF448AFF</color>
+    <color name="green">#FF69F0AE</color>
+    <color name="yellow">#FFFFFF00</color>
+    <color name="purple">#FFE040FB</color>
+    <color name="orange">#FFFFAB40</color>
+    <color name="cyan">#FF18FFFF</color>
+    <color name="pink">#FFFF4081</color>
+    
+    
+    <color name="dark_gray">#FF212121</color>
+    <color name="dark_blue">#FF0D47A1</color>
+    <color name="dark_purple">#FF4A148C</color>
+    <color name="dark_brown">#FF5D4037</color>
+    <color name="dark_teal">#FF006064</color>
+    <color name="dark_indigo">#FF283593</color>
+    
+    
+    <color name="ambient_purple">#FF00FF</color>
+    <color name="ambient_cyan">#00FFFF</color>
+    <color name="ambient_yellow">#FFFF00</color>
+    <color name="ambient_pink">#FF69B4</color>
+    <color name="ambient_green">#00FF00</color>
+    <color name="ambient_orange">#FFA500</color>
+    <color name="ambient_deep_purple">#9400D3</color>
+    <color name="ambient_red">#FF0000</color>
+    <color name="ambient_dodger_blue">#1E90FF</color>
+    <color name="ambient_gold">#FFD700</color>
+    <color name="ambient_tomato">#FF6347</color>
+    <color name="ambient_chartreuse">#7FFF00</color>
+    <color name="ambient_crimson">#DC143C</color>
+    <color name="ambient_deep_pink">#FF1493</color>
+    <color name="ambient_dark_turquoise">#00CED1</color>
+    <color name="ambient_dark_orange">#FF8C00</color>
+    <color name="ambient_medium_purple">#9370DB</color>
+    <color name="ambient_medium_sea_green">#3CB371</color>
+    <color name="ambient_orange_red">#FF4500</color>
+    <color name="ambient_salmon">#FA8072</color>
+    <color name="ambient_sea_green">#2E8B57</color>
+    <color name="ambient_chocolate">#D2691E</color>
+    <color name="ambient_cadet_blue">#5F9EA0</color>
+    <color name="ambient_goldenrod">#DAA520</color>
+    <color name="ambient_spring_green">#00FF7F</color>
+    
+    
+    <color name="button_blue">#FF2196F3</color>
+    <color name="gray">#FF808080</color>
+    <color name="light_gray">#FFE0E0E0</color>
+    
+    
+    <color name="location_setting_bg">#FF333333</color>
+</resources>
