@@ -1,7 +1,8 @@
+# ===== 构建产物 =====
 *.apk
+*.aab
 *.aar
 *.ap_
-*.aab
 *.dex
 *.class
 /bin/
@@ -9,7 +10,6 @@
 /out/
 .gradle/
 /build/
-local.properties
 proguard/
 *.log
 .navigation/
@@ -20,3 +20,19 @@ captures/
 .cxx/
 .androidide
 .acside
+
+# ===== 签名文件（永远不要上传到仓库）=====
+/keystore/
+*.jks
+*.keystore
+*.p12
+*.pfx
+keystore.properties
+keystore.properties.local
+
+# ===== 本地配置（含签名密码等敏感信息）=====
+local.properties
+
+# ===== 系统文件 =====
+.DS_Store
+Thumbs.db

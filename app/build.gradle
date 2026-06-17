@@ -2,31 +2,53 @@ plugins {
     id 'com.android.application'
 }
 
+// ===== 读取签名信息（从 local.properties 或环境变量，避免硬编码到仓库）=====
+// 在你本地项目的根目录创建 local.properties 文件（已在 .gitignore 中），加入：
+//   storeFile=../keystore/release.jks
+//   storePassword=你的密码
+//   keyAlias=release
+//   keyPassword=你的密码
+// 或者通过环境变量传入：STORE_FILE / STORE_PASSWORD / KEY_ALIAS / KEY_PASSWORD
+// 如果都未配置，release 构建将使用 debug 签名（方便别人克隆后直接编译）
+def localProps = new Properties()
+def localPropsFile = rootProject.file('local.properties')
+if (localPropsFile.exists()) {
+    localProps.load(new FileInputStream(localPropsFile))
+}
+
+def storeFilePath = localProps.getProperty('storeFile') ?: System.getenv('STORE_FILE')
+def storePassword = localProps.getProperty('storePassword') ?: System.getenv('STORE_PASSWORD')
+def keyAlias = localProps.getProperty('keyAlias') ?: System.getenv('KEY_ALIAS')
+def keyPassword = localProps.getProperty('keyPassword') ?: System.getenv('KEY_PASSWORD')
+
 android {
     namespace 'com.xiaowei.music'
     compileSdk 36
-    
+
     defaultConfig {
         applicationId "com.xiaowei.music"
-        minSdk 21 
+        minSdk 21
         targetSdk 36
         versionCode 1
         versionName "1.0.0"
-        
-        vectorDrawables { 
+
+        vectorDrawables {
             useSupportLibrary true
         }
     }
 
     signingConfigs {
         release {
-            storeFile file('../keystore/release.jks')
-            storePassword 'music123'
-            keyAlias 'release'
-            keyPassword 'music123'
-            v1SigningEnabled true
-            v2SigningEnabled true
-            enableV3Signing true
+            // 仅在签名信息齐全时配置；否则该 config 为空，release 会回退到 debug 签名
+            if (storeFilePath != null && storePassword != null && keyAlias != null && keyPassword != null) {
+                storeFile file(storeFilePath)
+                storePassword storePassword
+                keyAlias keyAlias
+                keyPassword keyPassword
+                v1SigningEnabled true
+                v2SigningEnabled true
+                enableV3Signing true
+            }
         }
     }
 
@@ -34,7 +56,13 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+            // 仅当签名信息已配置时才使用 release 签名，否则使用默认 debug 签名
+            if (storeFilePath != null && storePassword != null && keyAlias != null && keyPassword != null) {
+                signingConfig signingConfigs.release
+            } else {
+                // 没有签名配置时，回退到 debug 签名（保证项目可编译）
+                signingConfig signingConfigs.debug
+            }
         }
     }
 
@@ -42,18 +70,18 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    
+
     buildFeatures {
         viewBinding true
     }
 }
 
 dependencies {
-    
+
     implementation 'com.android.support:design:28.0.0'
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    
-    
+
+
     implementation 'com.android.support:support-v4:28.0.0'
 }

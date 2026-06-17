@@ -57,6 +57,35 @@
 
 ---
 
+## 🔨 构建说明
+
+### 签名配置
+
+本仓库**不包含**任何签名文件（keystore / jks）。如需自行构建 release 版本，请按以下步骤配置签名：
+
+1. **生成自己的签名文件**（如果还没有）：
+
+   ```bash
+   keytool -genkey -v -keystore release.jks -keyalg RSA -keysize 2048 -validity 10000 -alias release
+   ```
+
+2. **在项目根目录创建 `local.properties` 文件**（已被 `.gitignore` 排除，不会被提交），加入：
+
+   ```properties
+   storeFile=../keystore/release.jks
+   storePassword=你的密码
+   keyAlias=release
+   keyPassword=你的密码
+   ```
+
+3. **重新构建**，Gradle 会自动使用 `local.properties` 中的签名配置。
+
+> 如果未配置签名信息，release 构建将自动回退到 debug 签名，方便测试编译。
+
+详细说明参见 [`keystore.properties.example`](keystore.properties.example)。
+
+---
+
 ## 📜 开源协议
 
 本项目基于 [GNU General Public License v3.0](LICENSE) 开源协议发布。
