@@ -370,10 +370,6 @@ public class MainActivity extends AppCompatActivity {
                             goToMusicPlayer();
                             return true;
                         }
-                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                            Toast.makeText(MainActivity.this, R.string.toast_system_unsupported, Toast.LENGTH_SHORT).show();
-                            return true;
-                        }
                         checkAndRequestNotificationPermission();
                         return true;
                     }
@@ -461,16 +457,12 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            String listeners = android.provider.Settings.Secure.getString(
-                    getContentResolver(), "enabled_notification_listeners");
-            if (listeners != null && listeners.contains(getPackageName())) {
-                checkPostNotificationPermissionAndGo();
-            } else {
-                showNotificationPermissionDialog();
-            }
+        String listeners = android.provider.Settings.Secure.getString(
+                getContentResolver(), "enabled_notification_listeners");
+        if (listeners != null && listeners.contains(getPackageName())) {
+            checkPostNotificationPermissionAndGo();
         } else {
-            Toast.makeText(this, R.string.toast_system_unsupported, Toast.LENGTH_SHORT).show();
+            showNotificationPermissionDialog();
         }
     }
 
