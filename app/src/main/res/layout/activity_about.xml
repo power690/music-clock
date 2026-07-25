@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_height="match_parent"
+     android:layout_width="match_parent"
+     android:background="#FF222222"
+     android:gravity="center"
+     android:padding="16dp"
+     android:orientation="vertical">
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:layout_marginBottom="30dp"
+         android:gravity="center"
+         android:textSize="22sp"
+         android:textColor="#FFFFFFFF"
+         android:id="@+id/titleText"
+         android:text="@string/about_title"
+         android:textStyle="bold" />
+
+    <LinearLayout
+         android:layout_height="0dp"
+         android:layout_width="match_parent"
+         android:weightSum="3"
+         android:gravity="center"
+         android:orientation="horizontal"
+         android:layout_weight="1">
+
+        <LinearLayout
+             android:id="@+id/qqContainer"
+             android:layout_height="wrap_content"
+             android:layout_width="0dp"
+             android:gravity="center"
+             android:layout_margin="2dp"
+             android:padding="4dp"
+             android:orientation="vertical"
+             android:layout_weight="1"
+             android:clickable="true"
+             android:focusable="true">
+
+            <ImageView
+                 android:layout_height="80dp"
+                 android:layout_width="80dp"
+                 android:src="@drawable/pp"
+                 android:scaleType="centerCrop" />
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:layout_marginTop="10dp"
+                 android:gravity="center"
+                 android:textSize="14sp"
+                 android:textColor="#FFFFFFFF"
+                 android:text="@string/qq_group_number" />
+
+        </LinearLayout>
+
+        <LinearLayout
+             android:id="@+id/developerContainer"
+             android:layout_height="wrap_content"
+             android:layout_width="0dp"
+             android:gravity="center"
+             android:layout_margin="2dp"
+             android:padding="4dp"
+             android:orientation="vertical"
+             android:layout_weight="1"
+             android:clickable="true"
+             android:focusable="true">
+
+            <ImageView
+                 android:layout_height="80dp"
+                 android:layout_width="80dp"
+                 android:layout_marginBottom="15dp"
+                 android:src="@drawable/developer_avatar"
+                 android:scaleType="centerCrop"
+                 android:background="@drawable/spinner_background_white_border"
+                 android:id="@+id/avatarImageView" />
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:gravity="center"
+                 android:textSize="20sp"
+                 android:textColor="#FFFFFFFF"
+                 android:id="@+id/nameTextView"
+                 android:text="@string/developer_name"
+                 android:textStyle="bold" />
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:gravity="center"
+                 android:textSize="16sp"
+                 android:textColor="#FFCCCCCC"
+                 android:id="@+id/versionTextView"
+                 android:text="@string/version_1_1_0" />
+
+        </LinearLayout>
+
+        <LinearLayout
+             android:id="@+id/githubContainer"
+             android:layout_height="wrap_content"
+             android:layout_width="0dp"
+             android:gravity="center"
+             android:layout_margin="2dp"
+             android:padding="4dp"
+             android:orientation="vertical"
+             android:layout_weight="1"
+             android:clickable="true"
+             android:focusable="true">
+
+            <ImageView
+                 android:layout_height="80dp"
+                 android:layout_width="80dp"
+                 android:src="@drawable/github"
+                 android:scaleType="centerCrop" />
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:layout_marginTop="10dp"
+                 android:gravity="center"
+                 android:textSize="16sp"
+                 android:textColor="#FFFFFFFF"
+                 android:text="@string/open_source_address" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:gravity="center"
+         android:orientation="horizontal"
+         android:layout_marginTop="10dp">
+
+        <Button
+             android:layout_height="36dp"
+             android:layout_width="140dp"
+             android:background="@color/light_gray"
+             android:focusableInTouchMode="true"
+             android:textSize="13sp"
+             android:textColor="#FF000000"
+             android:focusable="true"
+             android:id="@+id/confirmButton"
+             android:text="@string/next_step" />
+
+    </LinearLayout>
+
+</LinearLayout>
