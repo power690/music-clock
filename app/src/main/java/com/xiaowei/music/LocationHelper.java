@@ -27,6 +27,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLSession;
+import java.security.cert.X509Certificate;
 
 public class LocationHelper {
 
@@ -70,6 +76,33 @@ public class LocationHelper {
     }
 
     private LocationHelper() {}
+
+    private static void trustAllHostsForOldAndroid(HttpURLConnection connection) {
+        if (connection instanceof HttpsURLConnection) {
+            try {
+                TrustManager[] trustAllCerts = new TrustManager[]{
+                        new X509TrustManager() {
+                            public X509Certificate[] getAcceptedIssuers() {
+                                return new X509Certificate[]{};
+                            }
+                            public void checkClientTrusted(X509Certificate[] chain, String authType) {}
+                            public void checkServerTrusted(X509Certificate[] chain, String authType) {}
+                        }
+                };
+                SSLContext sc = SSLContext.getInstance("TLS");
+                sc.init(null, trustAllCerts, new java.security.SecureRandom());
+                ((HttpsURLConnection) connection).setSSLSocketFactory(sc.getSocketFactory());
+                ((HttpsURLConnection) connection).setHostnameVerifier(new HostnameVerifier() {
+                    @Override
+                    public boolean verify(String hostname, SSLSession session) {
+                        return true;
+                    }
+                });
+            } catch (Exception e) {
+                Log.e(TAG, "trustAllHostsForOldAndroid error", e);
+            }
+        }
+    }
 
     public static boolean hasPermission(Context context) {
         int fine = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION);
@@ -421,8 +454,7 @@ public class LocationHelper {
             Log.d(TAG, "[GEO] HTTP GET zoom=" + zoom + " url=" + url);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             try {
-                if (conn instanceof HttpsURLConnection) {
-                }
+                trustAllHostsForOldAndroid(conn);
                 conn.setRequestMethod("GET");
                 conn.setConnectTimeout(10_000);
                 conn.setReadTimeout(10_000);
