@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="music_h_album_size">180dp</dimen>
+    <dimen name="music_h_progress_width">280dp</dimen>
+    <dimen name="music_h_btn_size">44dp</dimen>
+    <dimen name="music_h_btn_minor_size">32dp</dimen>
+    <dimen name="music_h_song_title_size">16sp</dimen>
+    <dimen name="music_h_artist_size">11.5sp</dimen>
+    <dimen name="music_h_time_size">13sp</dimen>
+    <dimen name="music_h_content_max_width">750dp</dimen>
+    <dimen name="music_h_content_scale">1.0</dimen>
+    <dimen name="music_h_content_margin_h">12dp</dimen>
+    <dimen name="music_h_content_width_percent">0.92</dimen>
+    <dimen name="music_h_left_margin_start">8dp</dimen>
+    <dimen name="music_h_left_margin_end">6dp</dimen>
+</resources>

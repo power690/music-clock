@@ -25,7 +25,7 @@
             android:id="@+id/albumCardVertical"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:cardCornerRadius="24dp"
+            app:cardCornerRadius="@dimen/music_v_album_corner"
             app:cardElevation="0dp"
             app:cardBackgroundColor="@android:color/transparent"
             app:layout_constraintDimensionRatio="1:1"
@@ -34,7 +34,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.5"
             app:layout_constraintBottom_toTopOf="@+id/songInfoContainer"
-            app:layout_constraintWidth_percent="0.95">
+            app:layout_constraintWidth_percent="@dimen/music_v_album_percent">
 
             <ImageView
                 android:id="@+id/albumCoverVertical"
@@ -58,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/song_title_unknown"
                 android:textColor="@android:color/white"
-                android:textSize="21.84sp"
+                android:textSize="@dimen/music_v_song_title_size"
                 android:textStyle="bold"
                 android:ellipsize="end"
                 android:maxLines="1"
@@ -73,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/artist_unknown"
                 android:textColor="#99FFFFFF"
-                android:textSize="14.28sp"
+                android:textSize="@dimen/music_v_artist_size"
                 android:layout_marginTop="6dp"
                 android:ellipsize="end"
                 android:maxLines="1"
@@ -118,24 +118,24 @@
 
             <ImageView
                 android:id="@+id/btnPrevVertical"
-                android:layout_width="38dp"
-                android:layout_height="38dp"
+                android:layout_width="@dimen/music_v_btn_size"
+                android:layout_height="@dimen/music_v_btn_size"
                 android:src="@drawable/ic_skip_previous"
                 android:tint="#FFFFFFFF" />
 
             <ImageView
                 android:id="@+id/btnPlayPauseVertical"
-                android:layout_width="38dp"
-                android:layout_height="38dp"
+                android:layout_width="@dimen/music_v_btn_size"
+                android:layout_height="@dimen/music_v_btn_size"
                 android:src="@drawable/ic_pause"
                 android:tint="#FFFFFFFF"
-                android:layout_marginStart="45dp"
-                android:layout_marginEnd="45dp" />
+                android:layout_marginStart="@dimen/music_v_btn_margin"
+                android:layout_marginEnd="@dimen/music_v_btn_margin" />
 
             <ImageView
                 android:id="@+id/btnNextVertical"
-                android:layout_width="38dp"
-                android:layout_height="38dp"
+                android:layout_width="@dimen/music_v_btn_size"
+                android:layout_height="@dimen/music_v_btn_size"
                 android:src="@drawable/ic_skip_next"
                 android:tint="#FFFFFFFF" />
 
@@ -171,7 +171,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/time_zero"
                 android:textColor="#88FFFFFF"
-                android:textSize="13.2sp"
+                android:textSize="@dimen/music_v_time_size"
                 android:layout_marginTop="5dp"
                 android:layout_marginStart="8dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -183,7 +183,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/time_zero"
                 android:textColor="#88FFFFFF"
-                android:textSize="13.2sp"
+                android:textSize="@dimen/music_v_time_size"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
