@@ -113,7 +113,7 @@ public class AboutActivity extends AppCompatActivity {
         developerContainer = findViewById(R.id.developerContainer);
 
         nameTextView.setText(R.string.developer_name);
-        versionTextView.setText(R.string.version_1_1_0);
+        versionTextView.setText(R.string.version_1_3_0);
 
         boolean isFirstLaunch = getIntent().getBooleanExtra(getString(R.string.extra_first_launch), false);
         if (isFirstLaunch) {

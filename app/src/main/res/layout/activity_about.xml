@@ -94,7 +94,7 @@
                  android:textSize="16sp"
                  android:textColor="#FFCCCCCC"
                  android:id="@+id/versionTextView"
-                 android:text="@string/version_1_1_0" />
+                 android:text="@string/version_1_3_0" />
 
         </LinearLayout>
 
