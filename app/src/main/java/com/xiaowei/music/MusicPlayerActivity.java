@@ -463,24 +463,6 @@ public class MusicPlayerActivity extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
-    private String loadedLyricsPath = null;
-
-    private void loadLyricsForSong(final String path) {
-        if (path == null || path.equals(loadedLyricsPath)) return;
-        if (localMusicHelper == null) return;
-        loadedLyricsPath = path;
-        currentLyrics = new ArrayList<>();
-        resetKaraokeState();
-        lastLyricText = "";
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                final String lrc = localMusicHelper.getLyricsContent(path);
-                parseLyrics(lrc);
-            }
-        }).start();
-    }
-
     private void parseLyrics(String lrcContent) {
         List<LyricLine> parsed = new ArrayList<>();
         if (!TextUtils.isEmpty(lrcContent)) {
@@ -599,7 +581,13 @@ public class MusicPlayerActivity extends AppCompatActivity {
                         }
                         currentAlbumBitmap = cover;
 
-                        loadLyricsForSong(song.path);
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                String lrc = localMusicHelper.getLyricsContent(song.path);
+                                parseLyrics(lrc);
+                            }
+                        }).start();
 
                         if (isVerticalMode) {
                             updateVerticalUI();
@@ -660,12 +648,6 @@ public class MusicPlayerActivity extends AppCompatActivity {
                                     hideAmbientLights();
                                     stopAmbientLightAnimation();
                                 }
-                            }
-                        }
-                        if (playing && isLocalMode && localMusicHelper != null) {
-                            LocalMusicHelper.LocalSong song = localMusicHelper.getCurrentSong();
-                            if (song != null && song.path != null) {
-                                loadLyricsForSong(song.path);
                             }
                         }
                     }
