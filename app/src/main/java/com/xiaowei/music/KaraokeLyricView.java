@@ -21,6 +21,12 @@ public class KaraokeLyricView extends View {
     private final TextPaint paint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
     private int sungColor = 0xFFFFFFFF;
     private int dimColor = 0x99FFFFFF;
+    private boolean centerGravity = true;
+
+    public void setCenterGravity(boolean center) {
+        centerGravity = center;
+        invalidate();
+    }
 
     private List<LyricWord> words = new ArrayList<>();
     private int[] wordStart = new int[0];
@@ -223,7 +229,7 @@ public class KaraokeLyricView extends View {
 
         float drawX;
         if (textWidth <= viewW) {
-            drawX = (viewW - textWidth) / 2f;
+            drawX = centerGravity ? (viewW - textWidth) / 2f : 0f;
         } else {
             float focusX = sungWidth;
             float desired = focusX - viewW / 2f;

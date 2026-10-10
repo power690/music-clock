@@ -1400,6 +1400,7 @@ public class MusicPlayerActivity extends AppCompatActivity {
             karaokeLyric = findViewById(R.id.karaokeLyric);
             if (karaokeLyric != null && songTitle != null) {
                 karaokeLyric.setKaraokeTextSizePx(songTitle.getTextSize());
+                karaokeLyric.setCenterGravity(true);
             }
             progressBar = findViewById(R.id.progressBar);
             timeDisplay = findViewById(R.id.timeDisplay);
@@ -1573,6 +1574,7 @@ public class MusicPlayerActivity extends AppCompatActivity {
             karaokeLyricVertical = findViewById(R.id.karaokeLyricVertical);
             if (karaokeLyricVertical != null && songTitleVertical != null) {
                 karaokeLyricVertical.setKaraokeTextSizePx(songTitleVertical.getTextSize());
+                karaokeLyricVertical.setCenterGravity(false);
             }
             progressBarVertical = findViewById(R.id.progressBarVertical);
             timeCurrentVertical = findViewById(R.id.timeCurrentVertical);
