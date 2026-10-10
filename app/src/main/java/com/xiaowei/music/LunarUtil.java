@@ -72,14 +72,13 @@ public class LunarUtil {
         try {
             LunarDate lunarDate = solarToLunar(date);
             String cyclicalYear = getCyclicalYear(lunarDate.year);
-            String animal = getZodiacAnimal(lunarDate.year);
 
             String monthName = LUNAR_MONTH_NAMES[lunarDate.month - 1];
             if (lunarDate.isLeap) {
                 monthName = "闰" + monthName;
             }
             String dayName = LUNAR_DAY_NAMES[lunarDate.day - 1];
-            return cyclicalYear + "年(" + animal + ")" + monthName + dayName;
+            return cyclicalYear + "年" + monthName + dayName;
         } catch (Exception e) {
             return "农历计算失败";
         }
