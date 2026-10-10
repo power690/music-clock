@@ -1177,15 +1177,6 @@ public class MusicPlayerActivity extends AppCompatActivity {
                             }
                             currentMediaPosition = playbackState.getPosition();
                             int state = playbackState.getState();
-                            if (state == PlaybackState.STATE_PLAYING) {
-                                long driftMs = android.os.SystemClock.elapsedRealtime() - playbackState.getLastPositionUpdateTime();
-                                if (driftMs > 0) {
-                                    currentMediaPosition += driftMs;
-                                    if (currentMediaDuration > 0 && currentMediaPosition > currentMediaDuration) {
-                                        currentMediaPosition = currentMediaDuration;
-                                    }
-                                }
-                            }
                             boolean wasMusicPlaying = isMusicPlaying;
                             isMusicPlaying = (state == PlaybackState.STATE_PLAYING);
                             if (isMusicPlaying != wasMusicPlaying) {
