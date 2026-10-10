@@ -67,6 +67,16 @@
                 app:layout_constraintEnd_toStartOf="@+id/btnRotateBack"
                 android:layout_marginEnd="10dp" />
 
+            <com.xiaowei.music.KaraokeLyricView
+                android:id="@+id/karaokeLyricVertical"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintTop_toTopOf="@+id/songTitleVertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btnRotateBack" />
+
             <TextView
                 android:id="@+id/artistNameVertical"
                 android:layout_width="0dp"

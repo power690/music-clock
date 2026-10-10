@@ -26,10 +26,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -264,192 +262,142 @@ public class LocalMusicHelper {
     }
 
     public String getLyricsContent(String audioPath) {
-
-        String embeddedLyrics = getEmbeddedLyricsKt(audioPath);
-        if (!TextUtils.isEmpty(embeddedLyrics)) {
-            Log.d(TAG, "Found embedded lyrics for: " + audioPath);
-            return embeddedLyrics;
-        }
-
-        try {
-            File audioFile = new File(audioPath);
-            String parentDir = audioFile.getParent();
-            String fileName = audioFile.getName();
-            String nameNoExt = fileName;
-            int dotIndex = fileName.lastIndexOf('.');
-            if (dotIndex > 0) {
-                nameNoExt = fileName.substring(0, dotIndex);
-            }
-
-            File lrcFile = new File(parentDir, nameNoExt + ".lrc");
-            if (lrcFile.exists() && lrcFile.isFile()) {
-                StringBuilder sb = new StringBuilder();
-                FileInputStream fis = new FileInputStream(lrcFile);
-                BufferedReader br = new BufferedReader(new InputStreamReader(fis));
-                String line;
-                while ((line = br.readLine()) != null) {
-                    sb.append(line).append("\n");
-                }
-                br.close();
-                fis.close();
-                Log.d(TAG, "Found external lrc file");
-                return sb.toString();
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "read lrc failed: " + e.getMessage());
-        }
-
-        return null;
-    }
-
-    private String getEmbeddedLyricsKt(String audioPath) {
         if (audioPath == null || audioPath.isEmpty()) return null;
-        String lower = audioPath.toLowerCase();
+
+        String lrc = readLrcFile(audioPath);
+        if (lrc != null && !lrc.trim().isEmpty()) {
+            return lrc;
+        }
+
         try {
+            String lower = audioPath.toLowerCase();
             if (lower.endsWith(".flac")) {
                 return FlacLyricsParser.INSTANCE.readLyrics(audioPath);
             }
-            if (lower.endsWith(".mp3") && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                try {
-                    com.mpatric.mp3agic.Mp3File mp3 = new com.mpatric.mp3agic.Mp3File(audioPath);
-                    if (mp3.hasId3v2Tag()) {
-                        String l = mp3.getId3v2Tag().getLyrics();
-                        if (l != null && !l.trim().isEmpty()) return l;
-                    }
-                } catch (Throwable t) {
-                    Log.w(TAG, "mp3agic parse failed: " + t.getMessage());
+            if (lower.endsWith(".mp3")) {
+                return readMp3Uslt(audioPath);
+            }
+            if (lower.endsWith(".wav")) {
+                WavId3Parser.WavTag tag = cachedWavTag(audioPath);
+                if (tag != null) {
+                    String lyrics = tag.getLyrics();
+                    if (lyrics != null && !lyrics.trim().isEmpty()) return lyrics;
                 }
             }
         } catch (Throwable t) {
             Log.w(TAG, "embedded lyrics parse failed: " + t.getMessage());
         }
+
         return null;
     }
 
-    private static class AudioLyricsParser {
-        public static String getEmbeddedLyrics(String path) {
-            if (path.toLowerCase().endsWith(".mp3")) {
-                return getMp3Lyrics(path);
-            } else if (path.toLowerCase().endsWith(".flac")) {
-                return getFlacLyrics(path);
-            }
-            return null;
-        }
+    private final java.util.concurrent.ConcurrentHashMap<String, java.util.Set<String>> lrcDirCache =
+            new java.util.concurrent.ConcurrentHashMap<>();
 
-        private static String getFlacLyrics(String path) {
-            RandomAccessFile raf = null;
-            try {
-                raf = new RandomAccessFile(path, "r");
-                byte[] header = new byte[4];
-                raf.read(header);
-                if (!new String(header).equals("fLaC")) return null;
+    private String readLrcFile(String songPath) {
+        try {
+            File songFile = new File(songPath);
+            File dir = songFile.getParentFile();
+            if (dir == null) return null;
+            String base = songFile.getName();
+            int dot = base.lastIndexOf('.');
+            if (dot > 0) base = base.substring(0, dot);
 
-                boolean lastBlock = false;
-                while (!lastBlock) {
-                    int blockHeader = raf.readUnsignedByte();
-                    lastBlock = (blockHeader & 0x80) != 0;
-                    int type = blockHeader & 0x7F;
-                    int len1 = raf.readUnsignedByte();
-                    int len2 = raf.readUnsignedByte();
-                    int len3 = raf.readUnsignedByte();
-                    int length = (len1 << 16) | (len2 << 8) | len3;
-
-                    if (type == 4) {
-
-                        int vendorLen = Integer.reverseBytes(raf.readInt());
-                        raf.skipBytes(vendorLen);
-
-                        int commentListLen = Integer.reverseBytes(raf.readInt());
-                        for (int i = 0; i < commentListLen; i++) {
-                            int commentLen = Integer.reverseBytes(raf.readInt());
-                            byte[] commentBytes = new byte[commentLen];
-                            raf.read(commentBytes);
-                            String comment = new String(commentBytes, "UTF-8");
-                            if (comment.toUpperCase().startsWith("LYRICS=") ||
-                                comment.toUpperCase().startsWith("UNSYNCED LYRICS=")) {
-                                int eqIndex = comment.indexOf('=');
-                                return comment.substring(eqIndex + 1);
-                            }
-                        }
-                        return null;
-                    } else {
-                        raf.skipBytes(length);
-                    }
+            String dirKey = dir.getAbsolutePath();
+            java.util.Set<String> dirNames = lrcDirCache.get(dirKey);
+            if (dirNames == null) {
+                java.util.Set<String> names = new java.util.HashSet<>();
+                File[] children = dir.listFiles();
+                if (children != null) {
+                    for (File c : children) names.add(c.getName());
                 }
-            } catch (Exception e) {
-                Log.e(TAG, "FLAC parse error: " + e.getMessage());
-            } finally {
-                if (raf != null) try { raf.close(); } catch (IOException e) {}
+                java.util.Set<String> prev = lrcDirCache.putIfAbsent(dirKey, names);
+                dirNames = prev != null ? prev : names;
             }
-            return null;
-        }
 
-        private static String getMp3Lyrics(String path) {
-            RandomAccessFile raf = null;
-            try {
-                raf = new RandomAccessFile(path, "r");
-                byte[] header = new byte[3];
-                raf.read(header);
-                if (!new String(header).equals("ID3")) return null;
+            String[] candidates = {
+                base + ".lrc",
+                base + ".LRC",
+                base + " - 歌词.lrc",
+                base + ".lrc.txt",
+                base + ".ttml",
+                base + ".TTML",
+                base + " - 歌词.ttml",
+                base + ".txt"
+            };
 
-                raf.skipBytes(2);
-                byte flags = raf.readByte();
-                int size = readSynchsafeInt(raf);
-                long endOfTag = raf.getFilePointer() + size;
-
-                while (raf.getFilePointer() < endOfTag) {
-                    byte[] frameIdBytes = new byte[4];
-                    if (raf.read(frameIdBytes) < 4) break;
-                    String frameId = new String(frameIdBytes);
-
-                    int frameSize = raf.readInt();
-                    raf.skipBytes(2);
-
-                    if (frameId.equals("USLT")) {
-                        int encoding = raf.readByte();
-                        raf.skipBytes(3);
-
-                        int b;
-                        while ((b = raf.readByte()) != 0) {
-
-                        }
-
-                        if (encoding == 1 || encoding == 2) {
-                            long pos = raf.getFilePointer();
-                            if (raf.readByte() != 0) {
-                                raf.seek(pos);
-                            }
-                        }
-
-                        int readSoFar = 1 + 3 + 1;
-                        byte[] buffer = new byte[Math.min(frameSize - readSoFar, 50000)];
-                        raf.read(buffer);
-
-                        String charset = "ISO-8859-1";
-                        if (encoding == 1) charset = "UTF-16";
-                        if (encoding == 2) charset = "UTF-16BE";
-                        if (encoding == 3) charset = "UTF-8";
-
-                        return new String(buffer, charset).trim();
-                    } else {
-                        raf.skipBytes(frameSize);
+            for (String name : candidates) {
+                if (!dirNames.contains(name)) continue;
+                File f = new File(dir, name);
+                if (!f.exists() || !f.isFile()) continue;
+                try {
+                    java.io.FileInputStream fis = new java.io.FileInputStream(f);
+                    BufferedReader br = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8));
+                    StringBuilder sb = new StringBuilder();
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        sb.append(line).append("\n");
                     }
+                    br.close();
+                    fis.close();
+                    if (sb.length() > 0) return sb.toString();
+                } catch (Exception e) {
+                    Log.e(TAG, "read lrc file failed: " + name + " - " + e.getMessage());
                 }
-            } catch (Exception e) {
-                Log.e(TAG, "MP3 parse error: " + e.getMessage());
-            } finally {
-                if (raf != null) try { raf.close(); } catch (IOException e) {}
             }
-            return null;
+        } catch (Exception e) {
+            Log.e(TAG, "read lrc failed: " + e.getMessage());
         }
+        return null;
+    }
 
-        private static int readSynchsafeInt(RandomAccessFile raf) throws IOException {
-            int b1 = raf.readByte();
-            int b2 = raf.readByte();
-            int b3 = raf.readByte();
-            int b4 = raf.readByte();
-            return (b1 << 21) | (b2 << 14) | (b3 << 7) | b4;
+    private String readMp3Uslt(String filePath) {
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O) return null;
+        try {
+            com.mpatric.mp3agic.Mp3File mp3 = new com.mpatric.mp3agic.Mp3File(filePath, false);
+            if (mp3.hasId3v2Tag()) {
+                String lyrics = mp3.getId3v2Tag().getLyrics();
+                if (lyrics != null && !lyrics.trim().isEmpty()) return lyrics;
+            }
+        } catch (Throwable t) {
         }
+        return null;
+    }
+
+    private static class WavTagCacheEntry {
+        final long sizeBytes;
+        final long mtime;
+        final WavId3Parser.WavTag tag;
+
+        WavTagCacheEntry(long sizeBytes, long mtime, WavId3Parser.WavTag tag) {
+            this.sizeBytes = sizeBytes;
+            this.mtime = mtime;
+            this.tag = tag;
+        }
+    }
+
+    private final java.util.concurrent.ConcurrentHashMap<String, WavTagCacheEntry> wavTagCache =
+            new java.util.concurrent.ConcurrentHashMap<>();
+
+    private WavId3Parser.WavTag cachedWavTag(String path) {
+        if (path == null || path.isEmpty()) return null;
+        if (path.startsWith("http://") || path.startsWith("https://")) return null;
+        File file = new File(path);
+        if (!file.exists() || !file.canRead()) return null;
+        long size = file.length();
+        long mtime = file.lastModified();
+        WavTagCacheEntry cached = wavTagCache.get(path);
+        if (cached != null && cached.sizeBytes == size && cached.mtime == mtime) {
+            return cached.tag;
+        }
+        WavId3Parser.WavTag tag = null;
+        try {
+            tag = WavId3Parser.INSTANCE.readTag(file);
+        } catch (Throwable t) {
+            tag = null;
+        }
+        wavTagCache.put(path, new WavTagCacheEntry(size, mtime, tag));
+        return tag;
     }
 
     private Bitmap smartCropBitmap(Bitmap original) {
@@ -554,24 +502,39 @@ public class LocalMusicHelper {
     private Bitmap parseLocalMetadata(LocalSong song) {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         Bitmap coverBitmap = null;
+        WavId3Parser.WavTag wavTag = null;
+        if (song.path != null && song.path.toLowerCase().endsWith(".wav")) {
+            wavTag = cachedWavTag(song.path);
+        }
         try {
             retriever.setDataSource(song.path);
 
             String t = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
             if (!TextUtils.isEmpty(t)) song.title = t;
+            else if (wavTag != null && wavTag.getTitle() != null && !wavTag.getTitle().trim().isEmpty()) song.title = wavTag.getTitle();
 
             String a = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
             if (TextUtils.isEmpty(a)) a = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST);
             if (TextUtils.isEmpty(a)) a = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_AUTHOR);
+            if (TextUtils.isEmpty(a) && wavTag != null && wavTag.getArtist() != null) a = wavTag.getArtist();
             if (!TextUtils.isEmpty(a)) song.artist = a;
 
             String album = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
+            if (TextUtils.isEmpty(album) && wavTag != null && wavTag.getAlbum() != null) album = wavTag.getAlbum();
             song.album = album == null ? "" : album;
 
             String dur = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
             if (!TextUtils.isEmpty(dur)) song.duration = Long.parseLong(dur);
+            else if (wavTag != null && wavTag.getDurationMs() > 0) song.duration = wavTag.getDurationMs();
 
             byte[] art = retriever.getEmbeddedPicture();
+            if ((art == null || art.length == 0) && wavTag != null) {
+                try {
+                    art = WavId3Parser.INSTANCE.readCover(new File(song.path));
+                } catch (Throwable t2) {
+                    art = null;
+                }
+            }
             if (art != null && art.length > 0) {
 
                 Bitmap original = decodeSampledBitmapFromByteArray(art, 1200, 1200);

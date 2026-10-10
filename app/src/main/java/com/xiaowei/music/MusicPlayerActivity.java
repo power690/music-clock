@@ -66,12 +66,9 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class MusicPlayerActivity extends AppCompatActivity {
     private static final String TAG = "MusicPlayerActivity";
@@ -205,8 +202,11 @@ public class MusicPlayerActivity extends AppCompatActivity {
 
     private Bitmap currentAlbumBitmap = null;
 
-    private List<LrcEntry> currentLyrics = new ArrayList<>();
+    private List<LyricLine> currentLyrics = new ArrayList<>();
     private String lastLyricText = "";
+    private KaraokeLyricView karaokeLyric = null;
+    private KaraokeLyricView karaokeLyricVertical = null;
+    private LyricLine activeKaraokeLine = null;
 
     private Bitmap lastDisplayedBitmap = null;
     private boolean isUpdatingCover = false;
@@ -298,21 +298,6 @@ public class MusicPlayerActivity extends AppCompatActivity {
             Color.parseColor("#C0392B"),
             Color.parseColor("#7F8C8D")
     };
-
-    private static class LrcEntry implements Comparable<LrcEntry> {
-        long time;
-        String text;
-
-        public LrcEntry(long time, String text) {
-            this.time = time;
-            this.text = text;
-        }
-
-        @Override
-        public int compareTo(@NonNull LrcEntry o) {
-            return Long.compare(this.time, o.time);
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -479,37 +464,82 @@ public class MusicPlayerActivity extends AppCompatActivity {
     }
 
     private void parseLyrics(String lrcContent) {
-        currentLyrics.clear();
-        if (TextUtils.isEmpty(lrcContent)) return;
-        String[] lines = lrcContent.split("\n");
-
-        Pattern pattern = Pattern.compile("\\[(\\d{2}):(\\d{2})\\.(\\d{2,3})\\](.*)");
-        for (String line : lines) {
-            Matcher matcher = pattern.matcher(line);
-            if (matcher.matches()) {
-                try {
-                    long min = Long.parseLong(matcher.group(1));
-                    long sec = Long.parseLong(matcher.group(2));
-                    String milStr = matcher.group(3);
-                    long mil = Long.parseLong(milStr);
-
-                    if (milStr.length() == 2) {
-                        mil = mil * 10;
-                    }
-                    long time = min * 60 * 1000 + sec * 1000 + mil;
-                    String text = matcher.group(4);
-                    if (text != null) {
-                        text = text.trim();
-                    } else {
-                        text = "";
-                    }
-                    currentLyrics.add(new LrcEntry(time, text));
-                } catch (Exception e) {
-                    e.printStackTrace();
+        List<LyricLine> parsed = new ArrayList<>();
+        if (!TextUtils.isEmpty(lrcContent)) {
+            try {
+                if (TtmlParser.INSTANCE.looksLikeTtml(lrcContent)) {
+                    List<LyricLine> ttmlLines = TtmlParser.INSTANCE.parse(lrcContent);
+                    if (ttmLines != null) parsed = ttmLines;
+                } else {
+                    List<LyricLine> lrcLines = LyricsParser.INSTANCE.parse(lrcContent);
+                    if (lrcLines != null) parsed = lrcLines;
                 }
+            } catch (Throwable t) {
+                Log.w(TAG, "lyrics parse failed: " + t.getMessage());
             }
         }
-        Collections.sort(currentLyrics);
+        final List<LyricLine> result = parsed;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                currentLyrics = result;
+                resetKaraokeState();
+                lastLyricText = "";
+            }
+        });
+    }
+
+    private void resetKaraokeState() {
+        boolean anyVisible = (karaokeLyric != null && karaokeLyric.getVisibility() == View.VISIBLE)
+                || (karaokeLyricVertical != null && karaokeLyricVertical.getVisibility() == View.VISIBLE);
+        if (activeKaraokeLine == null && !anyVisible) return;
+        activeKaraokeLine = null;
+        if (karaokeLyric != null) {
+            karaokeLyric.clear();
+            karaokeLyric.setVisibility(View.GONE);
+        }
+        if (karaokeLyricVertical != null) {
+            karaokeLyricVertical.clear();
+            karaokeLyricVertical.setVisibility(View.GONE);
+        }
+        if (songTitle != null && songTitle.getVisibility() != View.VISIBLE) {
+            songTitle.setVisibility(View.VISIBLE);
+        }
+        if (songTitleVertical != null && songTitleVertical.getVisibility() != View.VISIBLE) {
+            songTitleVertical.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void showKaraokeLine(LyricLine line, long positionMs) {
+        activeKaraokeLine = line;
+        if (isVerticalMode) {
+            if (karaokeLyricVertical != null) {
+                karaokeLyricVertical.setLine(line.getWords());
+                if (karaokeLyricVertical.getVisibility() != View.VISIBLE) karaokeLyricVertical.setVisibility(View.VISIBLE);
+                karaokeLyricVertical.anchor(positionMs, isMusicPlaying);
+            }
+            if (songTitleVertical != null && songTitleVertical.getVisibility() != View.INVISIBLE) {
+                songTitleVertical.setVisibility(View.INVISIBLE);
+            }
+        } else {
+            if (karaokeLyric != null) {
+                karaokeLyric.setLine(line.getWords());
+                if (karaokeLyric.getVisibility() != View.VISIBLE) karaokeLyric.setVisibility(View.VISIBLE);
+                karaokeLyric.anchor(positionMs, isMusicPlaying);
+            }
+            if (songTitle != null && songTitle.getVisibility() != View.INVISIBLE) {
+                songTitle.setVisibility(View.INVISIBLE);
+            }
+        }
+    }
+
+    private void syncKaraokePlaying() {
+        if (karaokeLyric != null && karaokeLyric.getVisibility() == View.VISIBLE) {
+            karaokeLyric.anchor(currentMediaPosition, isMusicPlaying);
+        }
+        if (karaokeLyricVertical != null && karaokeLyricVertical.getVisibility() == View.VISIBLE) {
+            karaokeLyricVertical.anchor(currentMediaPosition, isMusicPlaying);
+        }
     }
 
     private void checkAndStartKeepAliveService() {
@@ -555,12 +585,7 @@ public class MusicPlayerActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 String lrc = localMusicHelper.getLyricsContent(song.path);
-                                if (lrc != null) {
-                                    parseLyrics(lrc);
-                                } else {
-                                    currentLyrics.clear();
-                                }
-                                lastLyricText = "";
+                                parseLyrics(lrc);
                             }
                         }).start();
 
@@ -1192,14 +1217,22 @@ public class MusicPlayerActivity extends AppCompatActivity {
                 try {
 
                     String textToDisplay = isLocalMode ? getDisplayTitle() : currentTitle;
+                    boolean karaokeActive = false;
                     if (currentLyrics != null && !currentLyrics.isEmpty()) {
-                        for (int i = 0; i < currentLyrics.size(); i++) {
-                            if (position >= currentLyrics.get(i).time) {
-                                textToDisplay = currentLyrics.get(i).text;
+                        int idx = LyricsParser.INSTANCE.findCurrentLine(currentLyrics, position, 200L);
+                        if (idx >= 0) {
+                            LyricLine line = currentLyrics.get(idx);
+                            String lineText = line.getText();
+                            if (line.isWordByWord() && lineText != null && !lineText.trim().isEmpty()) {
+                                karaokeActive = true;
+                                showKaraokeLine(line, position);
                             } else {
-                                break;
+                                textToDisplay = lineText == null ? "" : lineText;
                             }
                         }
+                    }
+                    if (!karaokeActive) {
+                        resetKaraokeState();
                     }
                     if (!textToDisplay.equals(lastLyricText)) {
                         lastLyricText = textToDisplay;
@@ -1364,6 +1397,10 @@ public class MusicPlayerActivity extends AppCompatActivity {
             backgroundImage = findViewById(R.id.backgroundImage);
             songTitle = findViewById(R.id.songTitle);
             artistName = findViewById(R.id.artistName);
+            karaokeLyric = findViewById(R.id.karaokeLyric);
+            if (karaokeLyric != null && songTitle != null) {
+                karaokeLyric.setKaraokeTextSizePx(songTitle.getTextSize());
+            }
             progressBar = findViewById(R.id.progressBar);
             timeDisplay = findViewById(R.id.timeDisplay);
             btnPrev = findViewById(R.id.btnPrev);
@@ -1533,6 +1570,10 @@ public class MusicPlayerActivity extends AppCompatActivity {
             backgroundImageVertical = findViewById(R.id.backgroundImageVertical);
             songTitleVertical = findViewById(R.id.songTitleVertical);
             artistNameVertical = findViewById(R.id.artistNameVertical);
+            karaokeLyricVertical = findViewById(R.id.karaokeLyricVertical);
+            if (karaokeLyricVertical != null && songTitleVertical != null) {
+                karaokeLyricVertical.setKaraokeTextSizePx(songTitleVertical.getTextSize());
+            }
             progressBarVertical = findViewById(R.id.progressBarVertical);
             timeCurrentVertical = findViewById(R.id.timeCurrentVertical);
             timeTotalVertical = findViewById(R.id.timeTotalVertical);
@@ -1644,6 +1685,7 @@ public class MusicPlayerActivity extends AppCompatActivity {
         backgroundImage = null;
         songTitle = null;
         artistName = null;
+        karaokeLyric = null;
         progressBar = null;
         timeDisplay = null;
         btnPrev = null;
@@ -1663,6 +1705,7 @@ public class MusicPlayerActivity extends AppCompatActivity {
         backgroundImageVertical = null;
         songTitleVertical = null;
         artistNameVertical = null;
+        karaokeLyricVertical = null;
         progressBarVertical = null;
         timeCurrentVertical = null;
         timeTotalVertical = null;
@@ -2000,6 +2043,7 @@ public class MusicPlayerActivity extends AppCompatActivity {
                         btnPlayPause.setImageResource(R.drawable.ic_play);
                     }
                 }
+                syncKaraokePlaying();
             } catch (Exception e) {
                 Log.e(TAG, "更新播放图标失败", e);
             }

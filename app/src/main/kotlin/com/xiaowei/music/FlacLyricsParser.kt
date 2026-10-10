@@ -13,7 +13,6 @@ object FlacLyricsParser {
     fun readLyrics(filePath: String): String? {
         val file = File(filePath)
         if (!file.exists() || !file.canRead()) return null
-        if (!isFlacFile(file)) return null
 
         return try {
             RandomAccessFile(file, "r").use { raf ->
@@ -50,18 +49,27 @@ object FlacLyricsParser {
         }
     }
 
-    private fun isFlacFile(file: File): Boolean {
-        if (file.length() < 4) return false
-        return try {
-            RandomAccessFile(file, "r").use { raf ->
-                raf.readByte().toInt() == 0x66 && 
-                raf.readByte().toInt() == 0x4C && 
-                raf.readByte().toInt() == 0x61 && 
-                raf.readByte().toInt() == 0x43    
+    fun readLyricsFromHead(head: ByteArray): String? {
+        if (head.size < 8) return null
+        if (head[0] != 0x66.toByte() || head[1] != 0x4C.toByte() ||
+            head[2] != 0x61.toByte() || head[3] != 0x43.toByte()
+        ) return null
+        var pos = 4
+        while (pos + 4 <= head.size) {
+            val headerByte = head[pos].toInt() and 0xFF
+            val blockType = headerByte and 0x7F
+            val len = ((head[pos + 1].toInt() and 0xFF) shl 16) or
+                      ((head[pos + 2].toInt() and 0xFF) shl 8) or
+                      (head[pos + 3].toInt() and 0xFF)
+            pos += 4
+            if (blockType == BLOCK_TYPE_VORBIS_COMMENT) {
+                if (pos + len > head.size) return null
+                return parseVorbisComment(head.copyOfRange(pos, pos + len))
             }
-        } catch (e: Exception) {
-            false
+            pos += len
+            if ((headerByte and 0x80) != 0) return null
         }
+        return null
     }
 
     private fun parseVorbisComment(data: ByteArray): String? {
@@ -93,7 +101,7 @@ object FlacLyricsParser {
             val value = comment.substring(eqIdx + 1)
 
             if (key in LYRICS_FIELDS) {
-                if (foundAny) lyricsBuilder.append('\n')
+                if (foundAny) continue
                 lyricsBuilder.append(value)
                 foundAny = true
             }

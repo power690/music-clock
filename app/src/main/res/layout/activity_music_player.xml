@@ -185,6 +185,16 @@
 
             </LinearLayout>
 
+            <com.xiaowei.music.KaraokeLyricView
+                 android:layout_height="wrap_content"
+                 android:layout_width="0dp"
+                 android:paddingEnd="18dp"
+                 android:visibility="gone"
+                 app:layout_constraintTop_toTopOf="@id/songInfoContainer"
+                 app:layout_constraintStart_toStartOf="parent"
+                 app:layout_constraintEnd_toEndOf="parent"
+                 android:id="@+id/karaokeLyric" />
+
             <LinearLayout
                  android:layout_height="wrap_content"
                  android:layout_width="wrap_content"
