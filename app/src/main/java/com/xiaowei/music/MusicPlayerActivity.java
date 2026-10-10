@@ -1218,17 +1218,21 @@ public class MusicPlayerActivity extends AppCompatActivity {
 
                     String textToDisplay = isLocalMode ? getDisplayTitle() : currentTitle;
                     boolean karaokeActive = false;
+                    String lineDebug = "";
                     if (currentLyrics != null && !currentLyrics.isEmpty()) {
                         int idx = LyricsParser.INSTANCE.findCurrentLine(currentLyrics, position, 200L);
                         if (idx >= 0) {
                             LyricLine line = currentLyrics.get(idx);
                             String lineText = line.getText();
+                            lineDebug = " |L" + idx + " " + line.getTimeMs();
                             if (line.isWordByWord() && lineText != null && !lineText.trim().isEmpty()) {
                                 karaokeActive = true;
                                 showKaraokeLine(line, position);
                             } else {
                                 textToDisplay = lineText == null ? "" : lineText;
                             }
+                        } else {
+                            lineDebug = " |L-1";
                         }
                     }
                     if (!karaokeActive) {
@@ -1256,14 +1260,14 @@ public class MusicPlayerActivity extends AppCompatActivity {
                             int progress = (int) ((position * 1000) / duration);
                             progressBarVertical.setProgress(progress);
                         }
-                        if (timeCurrentVertical != null) timeCurrentVertical.setText(formatTime(position));
+                        if (timeCurrentVertical != null) timeCurrentVertical.setText(formatTime(position) + lineDebug);
                         if (timeTotalVertical != null) timeTotalVertical.setText(formatTime(duration));
                     } else {
                         if (progressBar != null && duration > 0) {
                             int progress = (int) ((position * 1000) / duration);
                             progressBar.setProgress(progress);
                         }
-                        if (timeDisplay != null) timeDisplay.setText(getString(R.string.time_format, formatTime(position), formatTime(duration)));
+                        if (timeDisplay != null) timeDisplay.setText(getString(R.string.time_format, formatTime(position), formatTime(duration)) + lineDebug);
                     }
                 } catch (Exception e) {
                     Log.e(TAG, "更新进度UI异常", e);
