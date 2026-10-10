@@ -468,11 +468,11 @@ public class MusicPlayerActivity extends AppCompatActivity {
         if (!TextUtils.isEmpty(lrcContent)) {
             try {
                 if (TtmlParser.INSTANCE.looksLikeTtml(lrcContent)) {
-                    List<LyricLine> ttmlLines = TtmlParser.INSTANCE.parse(lrcContent);
-                    if (ttmLines != null) parsed = ttmLines;
+                    List<LyricLine> parsedTtml = TtmlParser.INSTANCE.parse(lrcContent);
+                    if (parsedTtml != null) parsed = parsedTtml;
                 } else {
-                    List<LyricLine> lrcLines = LyricsParser.INSTANCE.parse(lrcContent);
-                    if (lrcLines != null) parsed = lrcLines;
+                    List<LyricLine> parsedLrc = LyricsParser.INSTANCE.parse(lrcContent);
+                    if (parsedLrc != null) parsed = parsedLrc;
                 }
             } catch (Throwable t) {
                 Log.w(TAG, "lyrics parse failed: " + t.getMessage());

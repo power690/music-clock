@@ -266,7 +266,7 @@ public class KaraokeLyricView extends View {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         frameRunning = false;
-        Choreographer.getInstance().removeCallbacks(frameCallback);
+        Choreographer.getInstance().removeFrameCallback(frameCallback);
     }
 
     private void postFrameCallback() {
